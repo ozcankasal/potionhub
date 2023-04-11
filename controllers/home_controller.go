@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -13,15 +15,12 @@ func NewHomeController() *HomeController {
 
 func (ctrl *HomeController) GetHome(c *gin.Context) {
 	session := sessions.Default(c)
-	user := session.Get("user")
+	username := session.Get("user")
 
-	var username string
-	if user != nil {
-		username = user.(string)
-	}
+	fmt.Println("Username in session:", username)
 
 	c.HTML(200, "home.html", gin.H{
 		"title":    "Home",
-		"username": username,
+		"username": username.(string),
 	})
 }
