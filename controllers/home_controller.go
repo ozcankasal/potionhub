@@ -11,5 +11,5 @@ func NewHomeController() *HomeController {
 }
 
 func (ctrl *HomeController) GetHome(c *gin.Context) {
-	c.HTML(200, "base", nil)
+	c.HTML(200, "home", nil)
 }
