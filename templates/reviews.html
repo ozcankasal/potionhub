@@ -1,0 +1,16 @@
+{{ template "head.html" .}}
+<h2>Reviews for {{.Potion.Name}}</h2>
+{{if .Reviews}}
+<ul class="review-list">
+    {{range .Reviews}}
+    <li>
+        <p class="review-rating">{{.Rating}}/5</p>
+        <p class="review-text">{{.Text}}</p>
+        <p class="review-author">- {{.Author}}</p>
+    </li>
+    {{end}}
+</ul>
+{{else}}
+<p>No reviews yet. Be the first to leave a review!</p>
+{{end}}
+{{ template "foot.html" .}}

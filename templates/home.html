@@ -1,0 +1,9 @@
+<!-- templates/home.html -->
+{{ template "head.html" .}}
+{{if .username}}
+<p>Welcome, {{.username}}! You're logged in.</p>
+{{else}}
+<h2>Welcome to PotionHub</h2>
+<p>The enchanted marketplace for magical beings to buy, sell, and trade potions, elixirs, and magical ingredients.</p>
+{{end}}
+{{ template "foot.html" . }}

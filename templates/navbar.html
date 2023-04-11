@@ -1,0 +1,16 @@
+<!-- templates/partials/navbar.html -->
+<nav>
+	<ul>
+		<li><a href="/">Home</a></li>
+		<li><a href="/catalog">Catalog</a></li>
+		{{if .User}}
+			<li><a href="/profile">{{.User.Username}}</a></li>
+			<li><a href="/logout">Logout</a></li>
+		{{else}}
+			<li><a href="/login">Login</a></li>
+			<li><a href="/logout">Logout</a></li>
+			<li><a href="/register">Register</a></li>
+		{{end}}
+		<li><a href="/cart">Cart</a></li>
+	</ul>
+</nav>
