@@ -1,22 +1,26 @@
-<!-- templates/about.html -->
-{{ template "head.html" .}}
-
-<h2>Potion Catalog</h2>
-<form class="filter-form">
-    <label>Filter by property:</label>
-    <input type="text" name="filter" value="{{.Filter}}">
-    <br>
-    <label>Sort by:</label>
-    <select name="sort">
-        <option value="">None</option>
-        <option value="name_asc">Name (A-Z)</option>
-        <option value="name_desc">Name (Z-A)</option>
-        <option value="price_asc">Price (Low to High)</option>
-        <option value="price_desc">Price (High to Low)</option>
-    </select>
-    <br>
-    <button type="submit">Apply</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Potion Catalog</title>
+</head>
+<body>
+    <h1>Potion Catalog</h1>
+    <form>
+        <label>Filter by property:</label>
+        <input type="text" name="filter" value="{{.Filter}}">
+        <br>
+        <label>Sort by:</label>
+        <select name="sort">
+            <option value="">None</option>
+            <option value="name_asc">Name (A-Z)</option>
+            <option value="name_desc">Name (Z-A)</option>
+            <option value="price_asc">Price (Low to High)</option>
+            <option value="price_desc">Price (High to Low)</option>
+        </select>
+        <br>
+        <button type="submit">Apply</button>
+    </form>
     <table>
         <tr>
             <th>Name</th>
@@ -26,12 +30,12 @@
         </tr>
         {{range .potions}}
         <tr>
-            <td>{{.Name}}</td>
+            <td><a href="/potion/{{.ID}}">{{.Name}}</a></td>
             <td>{{.Description}}</td>
             <td>{{formatAsDollars .Price}}</td>
             <td>{{join .Properties ", "}}</td>
         </tr>
         {{end}}
     </table>
-
-{{ template "foot.html" . }}
+</body>
+</html>

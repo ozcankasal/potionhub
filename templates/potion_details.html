@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>{{.potion.Name}} Details</title>
+ </head>
+ <body>
+  <h1>{{.potion.Name}}</h1>
+  <p>{{.potion.Description}}</p>
+  <p>Price: {{formatAsDollars .potion.Price}}</p>
+  <p>Properties: {{join .potion.Properties ", "}}</p>
+  <p><a href="/catalog">Back to Catalog</a></p>
+  <p><a href="/">Back to Home</a></p>
+ </body>
+</html>
