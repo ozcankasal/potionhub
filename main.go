@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ozcankasal/potionhub/controllers"
 	"github.com/ozcankasal/potionhub/middleware"
+	"github.com/ozcankasal/potionhub/models"
+	"github.com/ozcankasal/potionhub/services"
 	"github.com/ozcankasal/potionhub/utils"
 )
 
@@ -33,18 +35,33 @@ func main() {
 	store := cookie.NewStore([]byte("secret-key"))
 	r.Use(sessions.Sessions("mysession", store))
 
-	catalogController := controllers.NewCatalogController()
-	r.GET("/catalog", catalogController.GetCatalog)
+	// Initialize the database connection
+	db, err := models.NewDB("postgres://postgres:admin@0.0.0.0/potion_catalog?sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
 
-	authController := controllers.NewAuthController()
+	userService := services.NewUserService(db)
+
+	// Instantiate the controllers with the UserService
+	catalogController := controllers.NewCatalogController()
+	authController := controllers.NewAuthController(userService)
+
+	// Set up routes
+	r.GET("/catalog", catalogController.GetCatalog)
 	r.GET("/login", authController.GetLogin)
 
-	// Replace "fixedUsername" and "fixedPassword" with your desired values
-	authMiddleware := middleware.AuthRequired("admin", "admin")
+	// Create and set up the AuthRequired middleware
+	authMiddleware := middleware.AuthRequired(userService)
 	r.POST("/login", authMiddleware, authController.PostLogin)
 
 	welcomeController := controllers.NewWelcomeController()
 	r.GET("/welcome", welcomeController.GetWelcome)
+
+	registerController := controllers.NewRegisterController(userService)
+	// Add the registration routes
+	r.GET("/register", registerController.GetRegister)
+	r.POST("/register", registerController.PostRegister)
 
 	homeController := controllers.NewHomeController()
 	loggedInMiddleware := middleware.LoggedIn()

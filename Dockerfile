@@ -1,5 +1,5 @@
 # Use the official Golang image as a base image
-FROM golang:1.17-alpine
+FROM golang:1.18-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,10 +14,10 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o main .
+RUN go build -o potionhub .
 
 # Expose the port the app will run on
 EXPOSE 8080
 
 # Command to run the application when the container starts
-CMD ["/app/main"]
+CMD ["/app/potionhub"]

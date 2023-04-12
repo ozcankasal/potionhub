@@ -1,5 +1,3 @@
-// auth_controller.go
-
 package controllers
 
 import (
@@ -7,12 +5,18 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/ozcankasal/potionhub/services"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthController struct{}
+type AuthController struct {
+	userService *services.UserService
+}
 
-func NewAuthController() *AuthController {
-	return &AuthController{}
+func NewAuthController(userService *services.UserService) *AuthController {
+	return &AuthController{
+		userService: userService,
+	}
 }
 
 func (ctrl *AuthController) GetLogin(c *gin.Context) {
@@ -23,28 +27,31 @@ func (ctrl *AuthController) PostLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
-	// Mock username and password for validation
-	mockUsername := "admin"
-	mockPassword := "admin"
-
-	session := sessions.Default(c)
-
-	if username == mockUsername && password == mockPassword {
-		// Set the user session
-		session.Set("user", username)
-		_ = session.Save()
-
-		// Redirect to the home page
-		c.Redirect(http.StatusSeeOther, "/")
-	} else {
-		// Show an error message and render the login template again
+	user, err := ctrl.userService.GetUserByUsername(username)
+	if err != nil {
 		c.HTML(200, "login.html", gin.H{
 			"error": "Invalid username or password",
 		})
+		return
 	}
+
+	// Compare the provided password with the hashed password from the database
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		c.HTML(200, "login.html", gin.H{
+			"error": "Invalid username or password",
+		})
+		return
+	}
+
+	session := sessions.Default(c)
+	session.Set("user", username)
+	_ = session.Save()
+
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
-func (ac *AuthController) Logout(c *gin.Context) {
+func (ctrl *AuthController) Logout(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
 	_ = session.Save()
