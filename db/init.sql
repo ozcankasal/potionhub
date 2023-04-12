@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (username, email, password) VALUES ('admin', 'admin@example.com', 'admin');
+INSERT INTO users (username, email, password) VALUES ('admin', 'admin@example.com', '$2a$10$JnJug/exipCaBCsoLbAcI.9PygrXxq7UryCSlKtkXgk3NBZhsaSEO');
 
 -- Create potions table and insert sample data
 CREATE TABLE IF NOT EXISTS potions (
